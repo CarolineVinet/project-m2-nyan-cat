@@ -14,7 +14,9 @@ class Engine {
     // Initially, we have no enemies in the game. The enemies property refers to an array
     // that contains instances of the Enemy class
     this.enemies = [];
+    this.coins = [];
     // We add the background image to the game
+
     addBackground(this.root);
   }
 
@@ -39,11 +41,19 @@ class Engine {
       enemy.update(timeDiff);
     });
 
+    this.coins.forEach((coin) => {
+      coin.update(timeDiff);
+    });
+
     // We remove all the destroyed enemies from the array referred to by \`this.enemies\`.
     // We use filter to accomplish this.
     // Remember: this.enemies only contains instances of the Enemy class.
     this.enemies = this.enemies.filter((enemy) => {
       return !enemy.destroyed;
+    });
+
+    this.coins = this.coins.filter((coin) => {
+      return !coin.destroyed;
     });
 
     // We need to perform the addition of enemies until we have enough enemies.
@@ -54,12 +64,21 @@ class Engine {
       this.enemies.push(new Enemy(this.root, spot));
     }
 
+    while (this.coins.length < MAX_COINS) {
+      // We find the next available spot and, using this spot, we create an enemy.
+      // We add this enemy to the enemies array
+      const coinSpot = nextCoinSpot(this.coins);
+      this.coins.push(new Coin(this.root, coinSpot));
+    }
+
     // We check if the player is dead. If he is, we alert the user
     // and return from the method (Why is the return statement important?)
     if (this.isPlayerDead()) {
-      window.alert("Game over");
+      window.alert("YOU'RE DEAD CAROL!!!");
       return;
     }
+
+    this.coinCollect();
 
     // If the player is not dead, then we put a setTimeout to run the gameLoop in 20 milliseconds
     setTimeout(this.gameLoop, 20);
@@ -68,18 +87,38 @@ class Engine {
   // This method is not implemented correctly, which is why
   // the burger never dies. In your exercises you will fix this method.
   isPlayerDead = () => {
-    const playerXPosition = this.player.x;
-    console.log(this.player);
     let playerHasLost = false;
+    const playerXPosition = this.player.x;
+    const playerYPosition = this.player.y;
+
     this.enemies.forEach(function (enemy) {
       if (
-        enemy.y + ENEMY_HEIGHT >= GAME_HEIGHT - PLAYER_HEIGHT &&
-        enemy.x >= playerXPosition &&
+        enemy.y + ENEMY_HEIGHT > playerYPosition &&
+        enemy.y < playerYPosition + PLAYER_HEIGHT &&
+        enemy.x + ENEMY_WIDTH > playerXPosition &&
         enemy.x < playerXPosition + PLAYER_WIDTH
       ) {
         playerHasLost = true;
       }
     });
     return playerHasLost;
+  };
+
+  coinCollect = () => {
+    let bankAccount = 0;
+    const playerXPosition = this.player.x;
+    const playerYPosition = this.player.y;
+    this.coins.forEach(function (coin) {
+      if (
+        coin.y + COIN_HEIGHT > playerYPosition &&
+        coin.y < playerYPosition + PLAYER_HEIGHT &&
+        coin.x + COIN_WIDTH > playerXPosition &&
+        coin.x < playerXPosition + PLAYER_WIDTH
+      ) {
+        coin.domElement.style.display = "none";
+        bankAccount = bankAccount + 1;
+        console.log(bankAccount);
+      }
+    });
   };
 }

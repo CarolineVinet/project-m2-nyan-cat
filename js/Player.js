@@ -11,20 +11,20 @@ class Player {
 
     // The y position never changes, so we don't need to store it in a property. It represents the y position of the top of the
     // hamburger. The y position is the distance from the top margin of the browsing area.
-    const y = GAME_HEIGHT - PLAYER_HEIGHT - 10;
+    this.y = GAME_HEIGHT - PLAYER_HEIGHT - 70;
 
     // We create a DOM node. We will be updating the DOM node every time we move the player, so we store a reference to the
     // DOM node in a property.
-    this.domElement = document.createElement('img');
-    this.domElement.src = 'images/player.png';
-    this.domElement.style.position = 'absolute';
+    this.domElement = document.createElement("img");
+    this.domElement.src = "images/carolfinalgif.gif";
+    this.domElement.style.position = "absolute";
     this.domElement.style.left = `${this.x}px`;
-    this.domElement.style.top = ` ${y}px`;
-    this.domElement.style.zIndex = '10';
+    this.domElement.style.top = ` ${this.y}px`;
+    this.domElement.style.zIndex = "10";
     root.appendChild(this.domElement);
   }
 
-  // This method will be called when the user presses the left key. See in Engine.js
+  // This method will be called when the user presses the left key. See in MAIN.js
   // how we relate the key presses to this method
   moveLeft() {
     if (this.x > 0) {
@@ -40,5 +40,19 @@ class Player {
       this.x = this.x + PLAYER_WIDTH;
     }
     this.domElement.style.left = `${this.x}px`;
+  }
+
+  moveDown() {
+    if (this.y + PLAYER_HEIGHT < GAME_HEIGHT - 70) {
+      this.y = this.y + PLAYER_HEIGHT;
+    }
+    this.domElement.style.top = `${this.y}px`;
+  }
+
+  moveUp() {
+    if (this.y > 0) {
+      this.y = this.y - PLAYER_HEIGHT;
+    }
+    this.domElement.style.top = `${this.y}px`;
   }
 }
