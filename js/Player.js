@@ -16,7 +16,7 @@ class Player {
     // We create a DOM node. We will be updating the DOM node every time we move the player, so we store a reference to the
     // DOM node in a property.
     this.domElement = document.createElement("img");
-    this.domElement.src = "images/carolfinalgif.gif";
+    this.domElement.src = "images/cutecarole.png";
     this.domElement.style.position = "absolute";
     this.domElement.style.left = `${this.x}px`;
     this.domElement.style.top = ` ${this.y}px`;
@@ -32,6 +32,7 @@ class Player {
     }
 
     this.domElement.style.left = `${this.x}px`;
+    this.domElement.style.transform = "scaleX(1)";
   }
 
   // We do the same thing for the right key. See Engine.js to see when this happens.
@@ -40,6 +41,7 @@ class Player {
       this.x = this.x + PLAYER_WIDTH;
     }
     this.domElement.style.left = `${this.x}px`;
+    this.domElement.style.transform = "scaleX(-1)";
   }
 
   moveDown() {

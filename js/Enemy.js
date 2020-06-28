@@ -62,7 +62,7 @@ class Enemy {
     // If the y position of the DOM element is greater than the GAME_HEIGHT then the enemy is at the bottom
     // of the screen and should be removed. We remove the DOM element from the root DOM element and we set
     // the destroyed property to indicate that the enemy should no longer be in play
-    if (this.y > GAME_HEIGHT) {
+    if (this.y > GAME_HEIGHT - 90) {
       this.root.removeChild(this.domElement);
 
       this.destroyed = true;

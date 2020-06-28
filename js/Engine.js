@@ -15,6 +15,9 @@ class Engine {
     // that contains instances of the Enemy class
     this.enemies = [];
     this.coins = [];
+    this.bluecoins = [];
+    this.loopCounter = 0;
+    this.bankAccount = 0;
     // We add the background image to the game
 
     addBackground(this.root);
@@ -45,6 +48,10 @@ class Engine {
       coin.update(timeDiff);
     });
 
+    this.bluecoins.forEach((bluecoin) => {
+      bluecoin.update(timeDiff);
+    });
+
     // We remove all the destroyed enemies from the array referred to by \`this.enemies\`.
     // We use filter to accomplish this.
     // Remember: this.enemies only contains instances of the Enemy class.
@@ -54,6 +61,10 @@ class Engine {
 
     this.coins = this.coins.filter((coin) => {
       return !coin.destroyed;
+    });
+
+    this.bluecoins = this.bluecoins.filter((bluecoin) => {
+      return !bluecoin.destroyed;
     });
 
     // We need to perform the addition of enemies until we have enough enemies.
@@ -71,6 +82,16 @@ class Engine {
       this.coins.push(new Coin(this.root, coinSpot));
     }
 
+    while (
+      this.bluecoins.length < MAX_BLUECOINS &&
+      this.loopCounter % 500 === 0
+    ) {
+      // We find the next available spot and, using this spot, we create an enemy.
+      // We add this enemy to the enemies array
+      const bluecoinSpot = nextBlueCoinSpot(this.bluecoins);
+      this.bluecoins.push(new BlueCoin(this.root, bluecoinSpot));
+    }
+
     // We check if the player is dead. If he is, we alert the user
     // and return from the method (Why is the return statement important?)
     if (this.isPlayerDead()) {
@@ -79,7 +100,10 @@ class Engine {
     }
 
     this.coinCollect();
-
+    this.blueCoinCollect();
+    const bankScore = document.getElementById("bankScore");
+    bankScore.innerText = `BANK ACCOUNT : ${this.bankAccount}`;
+    this.loopCounter += 1;
     // If the player is not dead, then we put a setTimeout to run the gameLoop in 20 milliseconds
     setTimeout(this.gameLoop, 20);
   };
@@ -105,19 +129,39 @@ class Engine {
   };
 
   coinCollect = () => {
-    let bankAccount = 0;
     const playerXPosition = this.player.x;
     const playerYPosition = this.player.y;
-    this.coins.forEach(function (coin) {
+    this.coins.forEach((coin) => {
       if (
         coin.y + COIN_HEIGHT > playerYPosition &&
         coin.y < playerYPosition + PLAYER_HEIGHT &&
         coin.x + COIN_WIDTH > playerXPosition &&
         coin.x < playerXPosition + PLAYER_WIDTH
       ) {
-        coin.domElement.style.display = "none";
-        bankAccount = bankAccount + 1;
-        console.log(bankAccount);
+        //coin.domElement.style.display = "none";
+        this.root.removeChild(coin.domElement);
+        coin.destroyed = true;
+        this.bankAccount += 1;
+        console.log("coin", this.bankAccount);
+      }
+    });
+  };
+
+  blueCoinCollect = () => {
+    const playerXPosition = this.player.x;
+    const playerYPosition = this.player.y;
+    this.bluecoins.forEach((bluecoin) => {
+      if (
+        bluecoin.y + COIN_HEIGHT > playerYPosition &&
+        bluecoin.y < playerYPosition + PLAYER_HEIGHT &&
+        bluecoin.x + COIN_WIDTH > playerXPosition &&
+        bluecoin.x < playerXPosition + PLAYER_WIDTH
+      ) {
+        //bluecoin.domElement.style.display = "none";
+        this.root.removeChild(bluecoin.domElement);
+        bluecoin.destroyed = true;
+        this.bankAccount += 10;
+        console.log("bluecoin", this.bankAccount);
       }
     });
   };

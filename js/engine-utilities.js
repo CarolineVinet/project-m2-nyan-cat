@@ -59,6 +59,31 @@ const nextCoinSpot = (coins) => {
   return candidate;
 };
 
+const nextBlueCoinSpot = (bluecoins) => {
+  const blueCoinSpots = GAME_WIDTH / COIN_WIDTH;
+  const blueCoinSpotTaken = [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+  ];
+  bluecoins.forEach((bluecoin) => {
+    blueCoinSpotTaken[bluecoin.spot] = true;
+  });
+
+  let candidate = undefined;
+  while (candidate === undefined || blueCoinSpotTaken[candidate]) {
+    candidate = Math.floor(Math.random() * blueCoinSpots);
+  }
+  return candidate;
+};
+
 // addBackground contains all the logic to display the starry background of the game.
 // It is a variable that refers to a function.
 // The function takes one parameter

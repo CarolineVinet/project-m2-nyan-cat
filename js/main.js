@@ -34,7 +34,6 @@ const keydownHandler = (event) => {
 document.addEventListener("keydown", keydownHandler);
 
 // We call the gameLoop method to start the game
-gameEngine.gameLoop();
 
 const app = document.querySelector("#app");
 app.style.backgroundColor = "#156e15";
@@ -55,7 +54,8 @@ scoreHeader.style.paddingTop = "20px";
 scoreHeader.style.textDecoration = "underline";
 
 const bankScore = document.createElement("p");
-bankScore.innerText = "BANK ACCOUNT :";
+bankScore.id = "bankScore";
+bankScore.innerText = `BANK ACCOUNT : ${gameEngine.bankAccount}`;
 bankScore.style.color = "gold";
 bankScore.style.fontSize = "19px";
 bankScore.style.textAlign = "left";
@@ -65,3 +65,5 @@ bankScore.style.paddingLeft = "10px";
 app.appendChild(scoreContainer);
 scoreContainer.appendChild(scoreHeader);
 scoreContainer.appendChild(bankScore);
+
+gameEngine.gameLoop();
