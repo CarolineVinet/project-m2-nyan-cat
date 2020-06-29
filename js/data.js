@@ -14,6 +14,9 @@ const ENEMY_WIDTH = 116;
 const ENEMY_HEIGHT = 105;
 const MAX_ENEMIES = 1;
 
+const DON_WIDTH = 116;
+const DON_HEIGHT = 105;
+
 // These constants represent the player width and height.
 const PLAYER_WIDTH = 116;
 const PLAYER_HEIGHT = 105;

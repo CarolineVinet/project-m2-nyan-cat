@@ -23,6 +23,9 @@ class Enemy {
     // of the instance, so we make it a property of the instance. (Why is this information needed for the lifetime of the instance?)
     this.x = enemySpot * ENEMY_WIDTH;
 
+    this.enemySound = document.createElement("audio");
+    this.enemySound.src = "sounds/growl.mp3";
+
     // The y position is initially less than 0 so that the enemies fall from the top. This data is stored as a property
     // of the instance since it is needed throughout its lifetime. The destroyed property will indicate whether this enemy
     // is still in play. It is set to true whenever the enemy goes past the bottom of the screen.
@@ -69,7 +72,3 @@ class Enemy {
     }
   }
 }
-
-//new class xyz
-
-//this.domElement = document.createElement("img");

@@ -10,7 +10,7 @@ class Engine {
     this.root = theRoot;
     // We create our hamburger.
     // Please refer to Player.js for more information about what happens when you create a player
-    this.player = new Player(this.root);
+    //this.player = new Player(this.root);
     // Initially, we have no enemies in the game. The enemies property refers to an array
     // that contains instances of the Enemy class
     this.enemies = [];
@@ -18,7 +18,10 @@ class Engine {
     this.bluecoins = [];
     this.loopCounter = 0;
     this.bankAccount = 0;
-    // We add the background image to the game
+    this.attackAllowed = false;
+    this.don = undefined;
+    this.deadSound = document.createElement("audio");
+    this.carolScreamSound = document.createElement("audio");
 
     addBackground(this.root);
   }
@@ -31,6 +34,10 @@ class Engine {
     // This code is to see how much time, in milliseconds, has elapsed since the last
     // time this method was called.
     // (new Date).getTime() evaluates to the number of milliseconds since January 1st, 1970 at midnight.
+    if (!this.player) {
+      this.player = new Player(this.root);
+    }
+
     if (this.lastFrame === undefined) {
       this.lastFrame = new Date().getTime();
     }
@@ -51,6 +58,13 @@ class Engine {
     this.bluecoins.forEach((bluecoin) => {
       bluecoin.update(timeDiff);
     });
+
+    console.log(this.don);
+
+    if (this.don) {
+      console.log(this.don);
+      this.don.update(timeDiff);
+    }
 
     // We remove all the destroyed enemies from the array referred to by \`this.enemies\`.
     // We use filter to accomplish this.
@@ -95,16 +109,42 @@ class Engine {
     // We check if the player is dead. If he is, we alert the user
     // and return from the method (Why is the return statement important?)
     if (this.isPlayerDead()) {
-      window.alert("YOU'RE DEAD CAROL!!!");
+      this.player.domElement.src = "images/cloud.gif";
+      setTimeout(() => {
+        this.player.domElement.style.display = "none";
+      }, 900);
+      document.addEventListener("keydown", (event) => {
+        if (event.code === "Space") {
+          this.player.domElement.src = "images/cutecarole.png";
+          this.bankAccount = 0;
+          this.player.domElement.style.display = "";
+          this.gameLoop();
+        }
+      });
       return;
     }
 
     this.coinCollect();
     this.blueCoinCollect();
+
+    if (this.don) {
+      this.tigerEatsDon();
+    }
+
+    if (this.bankAccount >= 10 && this.attackAllowed === false) {
+      this.attackAllowed = true;
+      document.addEventListener("keydown", (event) => {
+        if (event.code === "KeyX") {
+          console.log("this.root", this.root);
+          this.don = new Don(this.root, this.player);
+        }
+      });
+    }
+
     const bankScore = document.getElementById("bankScore");
-    bankScore.innerText = `BANK ACCOUNT : ${this.bankAccount}`;
+    bankScore.innerText = `BANK ACCOUNT : ${this.bankAccount + "$"}`;
     this.loopCounter += 1;
-    // If the player is not dead, then we put a setTimeout to run the gameLoop in 20 milliseconds
+
     setTimeout(this.gameLoop, 20);
   };
 
@@ -115,13 +155,15 @@ class Engine {
     const playerXPosition = this.player.x;
     const playerYPosition = this.player.y;
 
-    this.enemies.forEach(function (enemy) {
+    this.enemies.forEach((enemy) => {
       if (
         enemy.y + ENEMY_HEIGHT > playerYPosition &&
         enemy.y < playerYPosition + PLAYER_HEIGHT &&
         enemy.x + ENEMY_WIDTH > playerXPosition &&
         enemy.x < playerXPosition + PLAYER_WIDTH
       ) {
+        enemy.enemySound.play();
+        this.player.playerSound.play();
         playerHasLost = true;
       }
     });
@@ -138,10 +180,10 @@ class Engine {
         coin.x + COIN_WIDTH > playerXPosition &&
         coin.x < playerXPosition + PLAYER_WIDTH
       ) {
-        //coin.domElement.style.display = "none";
         this.root.removeChild(coin.domElement);
         coin.destroyed = true;
         this.bankAccount += 1;
+        coin.coinSound.play();
         console.log("coin", this.bankAccount);
       }
     });
@@ -157,11 +199,29 @@ class Engine {
         bluecoin.x + COIN_WIDTH > playerXPosition &&
         bluecoin.x < playerXPosition + PLAYER_WIDTH
       ) {
-        //bluecoin.domElement.style.display = "none";
         this.root.removeChild(bluecoin.domElement);
         bluecoin.destroyed = true;
         this.bankAccount += 10;
+        bluecoin.coinSound.play();
         console.log("bluecoin", this.bankAccount);
+      }
+    });
+  };
+
+  tigerEatsDon = () => {
+    const donXPosition = this.don.x;
+    const donYPosition = this.don.y;
+    this.enemies.forEach((enemy, index) => {
+      if (
+        enemy.y + ENEMY_HEIGHT > donYPosition &&
+        enemy.y < donYPosition + DON_HEIGHT &&
+        enemy.x + ENEMY_WIDTH > donXPosition &&
+        enemy.x < donXPosition + DON_WIDTH
+      ) {
+        //this.root.removeChild(this.don.domElement);
+        //console.log(this.root);
+        console.log(index);
+        this.don.donIsDead();
       }
     });
   };
