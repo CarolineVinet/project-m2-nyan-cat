@@ -20,6 +20,7 @@ class Engine {
     this.bankAccount = 0;
     this.attackAllowed = false;
     this.don = undefined;
+    this.gameHasEnded = false;
     this.deadSound = document.createElement("audio");
     this.carolScreamSound = document.createElement("audio");
 
@@ -59,9 +60,9 @@ class Engine {
       bluecoin.update(timeDiff);
     });
 
-    console.log(this.don);
+    // console.log(this.don);
 
-    if (this.don) {
+    if (this.don && this.don.dead === false) {
       console.log(this.don);
       this.don.update(timeDiff);
     }
@@ -109,7 +110,7 @@ class Engine {
     // We check if the player is dead. If he is, we alert the user
     // and return from the method (Why is the return statement important?)
     if (this.isPlayerDead()) {
-      this.player.domElement.src = "images/cloud.gif";
+      this.player.domElement.src = "images/blood2.gif";
       setTimeout(() => {
         this.player.domElement.style.display = "none";
       }, 900);
@@ -118,6 +119,7 @@ class Engine {
           this.player.domElement.src = "images/cutecarole.png";
           this.bankAccount = 0;
           this.player.domElement.style.display = "";
+          this.gameHasEnded = false;
           this.gameLoop();
         }
       });
@@ -127,7 +129,7 @@ class Engine {
     this.coinCollect();
     this.blueCoinCollect();
 
-    if (this.don) {
+    if (this.don && this.don.dead === false) {
       this.tigerEatsDon();
     }
 
@@ -142,10 +144,20 @@ class Engine {
     }
 
     const bankScore = document.getElementById("bankScore");
-    bankScore.innerText = `BANK ACCOUNT : ${this.bankAccount + "$"}`;
+    bankScore.innerText = `  ${this.bankAccount + "$"}`;
     this.loopCounter += 1;
 
-    setTimeout(this.gameLoop, 20);
+    if (this.gameIsOver()) {
+      document.addEventListener("keydown", (event) => {
+        if (event.code === "Space") {
+          this.bankAccount = 0;
+          this.gameHasEnded = false;
+          this.gameLoop();
+        }
+      });
+    } else {
+      setTimeout(this.gameLoop, 20);
+    }
   };
 
   // This method is not implemented correctly, which is why
@@ -184,7 +196,7 @@ class Engine {
         coin.destroyed = true;
         this.bankAccount += 1;
         coin.coinSound.play();
-        console.log("coin", this.bankAccount);
+        // console.log("coin", this.bankAccount);
       }
     });
   };
@@ -203,7 +215,7 @@ class Engine {
         bluecoin.destroyed = true;
         this.bankAccount += 10;
         bluecoin.coinSound.play();
-        console.log("bluecoin", this.bankAccount);
+        // console.log("bluecoin", this.bankAccount);
       }
     });
   };
@@ -218,11 +230,26 @@ class Engine {
         enemy.x + ENEMY_WIDTH > donXPosition &&
         enemy.x < donXPosition + DON_WIDTH
       ) {
-        //this.root.removeChild(this.don.domElement);
-        //console.log(this.root);
-        console.log(index);
         this.don.donIsDead();
+        this.bankAccount += 7000000;
       }
     });
+  };
+  gameIsOver = () => {
+    if (
+      this.don &&
+      this.don.dead === true &&
+      this.bankAccount >= 500 &&
+      this.gameHasEnded === false
+    ) {
+      setTimeout(() => {
+        alert(
+          "CONGRATS, YOU'VE KILLED YOUR HUSBAND AND INHERITED HIS MONEY! YOU'RE RICH! GAME OVER!!!!"
+        );
+      }, 500);
+      this.gameHasEnded = true;
+      return true;
+    }
+    return false;
   };
 }

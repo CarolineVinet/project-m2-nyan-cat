@@ -61,7 +61,7 @@ scoreContainer.style.flexDirection = "column";
 
 const gameHeader = document.createElement("p");
 gameHeader.innerText = "LET'S MAKE CAROLE RICH!";
-gameHeader.style.color = "#3f9a3d";
+gameHeader.style.color = "#c3e4c2";
 gameHeader.style.fontSize = "28px";
 gameHeader.style.textAlign = "center";
 gameHeader.style.paddingTop = "20px";
@@ -69,48 +69,107 @@ gameHeader.style.fontFamily = "monospace";
 
 const rules = document.createElement("p");
 rules.innerText =
-  " Carole Baskin says she lives to rescue those big cats, but we all know what the woman really wants is M-O-N-E-Y ! Using the arrow keys, help Carole collect as much money as possible and make sure the tigers don't eat her!";
+  " Carole Baskin says she lives to rescue those big cats, but all she really wants is M-O-N-E-Y !";
 rules.style.fontFamily = "monospace";
-rules.style.color = "#3f9a3d";
-rules.style.lineHeight = "1.5";
+rules.style.color = "#c3e4c2";
+rules.style.lineHeight = "1";
 rules.style.textAlign = "center";
 rules.style.fontSize = "17px";
 rules.style.paddingTop = "10px";
 
+const rules2 = document.createElement("p");
+rules2.innerText =
+  "Using the arrow keys, help Carole collect as much money as possible and make sure the tigers don't eat her!";
+rules2.style.fontFamily = "monospace";
+rules2.style.color = "#c3e4c2";
+rules2.style.lineHeight = "1";
+rules2.style.textAlign = "center";
+rules2.style.fontSize = "17px";
+rules2.style.paddingTop = "10px";
+
+const rules3 = document.createElement("p");
+rules3.innerText =
+  "You win the game when Carole feeds her husband to a tiger and inherits his money! You can throw Don by pressing the X key, but only if Carole has at least 20$ in the bank! ";
+rules3.style.fontFamily = "monospace";
+rules3.style.color = "#c3e4c2";
+rules3.style.lineHeight = "1";
+rules3.style.textAlign = "center";
+rules3.style.fontSize = "17px";
+rules3.style.paddingTop = "10px";
+
+const yellowDiv = document.createElement("div");
+yellowDiv.style.display = "flex";
+yellowDiv.style.paddingLeft = "20px";
+yellowDiv.style.alignContent = "center";
+
+const yellowDivImg = document.createElement("img");
+yellowDivImg.src = "/images/finalcoingif.gif";
+
 const points = document.createElement("p");
-points.innerText = "YELLOW COINS  = 1$";
+points.innerText = " = 1$";
 points.style.color = "gold";
 points.style.fontFamily = "monospace";
-points.style.paddingTop = "50px";
+points.style.textAlign = "center";
 points.style.paddingLeft = "10px";
 points.style.fontSize = "20px";
 
+const blueDiv = document.createElement("div");
+blueDiv.style.display = "flex";
+
+const blueDivImg = document.createElement("img");
+blueDivImg.src = "/images/bluecoingif.gif";
+
 const pointsTwo = document.createElement("p");
-pointsTwo.innerText = "BLUE COINS  = 10$";
-pointsTwo.style.color = "#3a64a9";
+pointsTwo.innerText = " = 10$";
+pointsTwo.style.color = "#78a7f3";
 pointsTwo.style.fontFamily = "monospace";
+pointsTwo.style.textAlign = "center";
 pointsTwo.style.paddingLeft = "10px";
 pointsTwo.style.fontSize = "20px";
 
+const cashDiv = document.createElement("div");
+cashDiv.style.display = "flex";
+cashDiv.style.position = "relative";
+cashDiv.style.top = "115";
+cashDiv.style.paddingLeft = "5px";
+
+const cashDivImg = document.createElement("img");
+cashDivImg.src = "/images/moneystack.png";
+
 const bankScore = document.createElement("p");
 bankScore.id = "bankScore";
-bankScore.innerText = `BANK ACCOUNT : ${gameEngine.bankAccount + "$"}`;
-bankScore.style.color = "#3f9a3d";
-bankScore.style.fontSize = "24px";
-bankScore.style.textAlign = "left";
+bankScore.innerText = `  ${gameEngine.bankAccount + "$"}`;
+bankScore.style.color = "#73f16f";
+bankScore.style.fontSize = "20px";
+bankScore.style.textAlign = "center";
 bankScore.style.fontFamily = "monospace";
-bankScore.style.fontWeight = "bold";
+bankScore.style.paddingTop = "20px";
 bankScore.style.paddingLeft = "10px";
 
-//'Should Carole die, restart the game using the spacebar.'
-// Carole can use her special attack after collecting 50$!******(KEY TBD)*****'
+const rules4 = document.createElement("p");
+rules4.innerText =
+  " Press the spacebar to reset the game after either Carole or Don has died.";
+rules4.style.fontFamily = "monospace";
+rules4.style.color = "#c3e4c2";
+rules4.style.lineHeight = "1";
+rules4.style.textAlign = "center";
+rules4.style.fontSize = "17px";
+rules4.style.paddingTop = "10px";
 
 app.appendChild(startButton);
 app.appendChild(scoreContainer);
+
 scoreContainer.appendChild(gameHeader);
 scoreContainer.appendChild(rules);
-scoreContainer.appendChild(points);
-scoreContainer.appendChild(pointsTwo);
-scoreContainer.appendChild(bankScore);
-
-//gameEngine.gameLoop();
+scoreContainer.appendChild(rules2);
+scoreContainer.appendChild(rules3);
+scoreContainer.appendChild(rules4);
+scoreContainer.appendChild(yellowDiv);
+yellowDiv.appendChild(yellowDivImg);
+yellowDiv.appendChild(points);
+scoreContainer.appendChild(blueDiv);
+blueDiv.appendChild(blueDivImg);
+blueDiv.appendChild(pointsTwo);
+scoreContainer.appendChild(cashDiv);
+cashDiv.appendChild(cashDivImg);
+cashDiv.appendChild(bankScore);
