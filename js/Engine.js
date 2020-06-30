@@ -230,6 +230,8 @@ class Engine {
         enemy.x + ENEMY_WIDTH > donXPosition &&
         enemy.x < donXPosition + DON_WIDTH
       ) {
+        enemy.enemySound.play();
+        this.don.donSound.play();
         this.don.donIsDead();
         this.bankAccount += 7000000;
       }

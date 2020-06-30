@@ -12,7 +12,7 @@ const GAME_HEIGHT = 700;
 // as well as the maximum number of enemies on screen at any given time.
 const ENEMY_WIDTH = 116;
 const ENEMY_HEIGHT = 105;
-const MAX_ENEMIES = 1;
+const MAX_ENEMIES = 3;
 
 const DON_WIDTH = 116;
 const DON_HEIGHT = 105;

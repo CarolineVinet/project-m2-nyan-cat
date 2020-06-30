@@ -4,6 +4,9 @@ class Don {
     this.x = player.x;
     this.y = player.y;
 
+    this.donSound = document.createElement("audio");
+    this.donSound.src = "sounds/donscream.mp3";
+
     this.dead = false;
 
     this.domElement = document.createElement("img");
